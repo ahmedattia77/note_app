@@ -20,18 +20,25 @@ class ProfileImage extends StatelessWidget {
           borderRadius: BorderRadius.circular(35),
           child: 
           image != null ?
-          Image.file(
+          Image.file( 
             image!,
+            fit: .cover,
             frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
               if (wasSynchronouslyLoaded) return child;
               return AnimatedOpacity(
                 opacity: frame == null ? 0 : 1,
-                duration: const Duration(milliseconds: 500),
+                duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInOut,
                 child: child,
               );
             },
-          ): Icon(Icons.person_off_outlined),
+          ): Container(
+            height: 90,
+            width: 90,
+            decoration: BoxDecoration(
+              color: Colors.white70
+            ),
+            child: Icon(Icons.person_off_outlined)),
         ),
       ),
     );

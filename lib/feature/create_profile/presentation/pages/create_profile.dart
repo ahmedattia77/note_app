@@ -27,17 +27,17 @@ class _CreateProfileState extends State<CreateProfile> {
             image = pickedImage;
           })
         : '';
-        if (context.mounted) Navigator.pop(context);
+    if (context.mounted) Navigator.pop(context);
   }
 
   void _takeGallaryImage(BuildContext context) async {
     XFile? pickedImage = await picker.pickImage(source: ImageSource.gallery);
-     pickedImage != null
+    pickedImage != null
         ? setState(() {
             image = pickedImage;
           })
         : '';
-        if (context.mounted) Navigator.pop(context);
+    if (context.mounted) Navigator.pop(context);
   }
 
   @override
@@ -75,6 +75,13 @@ class _CreateProfileState extends State<CreateProfile> {
               Align(alignment: Alignment.centerLeft, child: FullNameText()),
               const SizedBox(height: 6),
               NameTextField(hintText: 'Ahmed Attia'),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: MediaQuery.widthOf(context),
+                height: 50,
+                child: FilledButton(onPressed: () {}, child: Text("Continue") ,
+                ),
+              ),
             ],
           ),
         ),
