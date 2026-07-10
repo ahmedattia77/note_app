@@ -3,6 +3,7 @@ import 'package:note_app/core/colors/app_colors.dart';
 import 'package:note_app/feature/home/data/model/home_task_data.dart';
 import 'package:note_app/feature/home/data/repo/task_repo.dart';
 import 'package:note_app/feature/home/data/use_case/get_today_tasks_use_case.dart';
+import 'package:note_app/feature/home/pages/add_task.dart';
 import 'package:note_app/feature/home/widgest/custom_appbar.dart';
 import 'package:note_app/feature/home/widgest/task_item_list.dart';
 import 'package:note_app/feature/home/widgest/task_summary_card.dart';
@@ -29,7 +30,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AddTask()),
+        ),
         backgroundColor: Colors.indigo,
         label: Text("Add Task", style: TextStyle(color: Colors.white)),
       ),
