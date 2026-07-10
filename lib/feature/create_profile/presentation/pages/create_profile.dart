@@ -46,49 +46,46 @@ class _CreateProfileState extends State<CreateProfile> {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ProfileImage(
-                image: image != null ? File(image!.path) : null,
-                onTab: () {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: true, // Click outside to close
-                    builder: (BuildContext context) {
-                      return ResourceDialog(
-                        onCameraTab: () => _takeCameraImage(context),
-                        onGalleryaTab: () => _takeGallaryImage(context),
-                      );
-                    },
-                  );
-                },
-              ),
-              const SizedBox(height: 20),
-              CreatePrifileText(),
-              const SizedBox(height: 6),
-              AddNameText(),
-              const SizedBox(height: 30),
-              Align(alignment: Alignment.centerLeft, child: FullNameText()),
-              const SizedBox(height: 6),
-              NameTextField(hintText: 'Ahmed Attia'),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: MediaQuery.widthOf(context),
-                height: 50,
-                child: FilledButton(
-                  onPressed: () => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
-                  ),
-                  child: Text("Continue"),
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ProfileImage(
+                  image: image != null ? File(image!.path) : null,
+                  onTab: () {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: true, // Click outside to close
+                      builder: (BuildContext context) {
+                        return ResourceDialog(
+                          onCameraTab: () => _takeCameraImage(context),
+                          onGalleryaTab: () => _takeGallaryImage(context),
+                        );
+                      },
+                    );
+                  },
                 ),
-              ),
-            ],
+                const SizedBox(height: 20),
+                CreatePrifileText(),
+                const SizedBox(height: 6),
+                AddNameText(),
+                const SizedBox(height: 30),
+                Align(alignment: Alignment.centerLeft, child: FullNameText()),
+                const SizedBox(height: 6),
+                NameTextField(hintText: 'Ahmed Attia'),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: MediaQuery.widthOf(context),
+                  height: 50,
+                  child: FilledButton(onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(),)), child: Text("Continue") ,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
