@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       home: Scaffold(
-        backgroundColor: AppColors.backgroundColor,
+        backgroundColor: const Color.fromARGB(255, 37, 45, 53),
         body: CreateProfile()),
     );
   }
