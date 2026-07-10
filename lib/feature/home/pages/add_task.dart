@@ -27,11 +27,11 @@ class _AddTaskState extends State<AddTask> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Scaffold(
-        appBar: AppBar(centerTitle: false, title: Text('Add Task')),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+    return Scaffold(
+      appBar: AppBar(centerTitle: false, title: Text('Add Task')),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: .start,
             children: [
@@ -42,7 +42,7 @@ class _AddTaskState extends State<AddTask> {
                   fontWeight: .bold,
                 ),
               ),
-      
+              
               const SizedBox(height: 10),
               CustomTextField(
                 controller: _titleController,
@@ -56,16 +56,16 @@ class _AddTaskState extends State<AddTask> {
                   fontWeight: .bold,
                 ),
               ),
-      
+              
               const SizedBox(height: 10),
               CustomTextField(
                 controller: _descController,
                 hintText: 'Task Description...',
                 maxLines: 5,
               ),
-      
+              
               const SizedBox(height: 30),
-      
+              
               const Text(
                 'Status',
                 style: TextStyle(
@@ -84,7 +84,7 @@ class _AddTaskState extends State<AddTask> {
                 },
               ),
               const SizedBox(height: 24),
-      
+              
               const Text(
                 'Choose Color',
                 style: TextStyle(
@@ -103,7 +103,7 @@ class _AddTaskState extends State<AddTask> {
                 },
               ),
               const SizedBox(height: 40),
-      
+              
               SizedBox(
                 width: double.infinity,
                 height: 56,
