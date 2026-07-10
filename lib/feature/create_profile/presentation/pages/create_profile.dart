@@ -7,6 +7,7 @@ import 'package:note_app/feature/create_profile/presentation/widgets/full_name_t
 import 'package:note_app/feature/create_profile/presentation/widgets/name_text_field.dart';
 import 'package:note_app/feature/create_profile/presentation/widgets/profile_image.dart';
 import 'package:note_app/feature/create_profile/presentation/widgets/resource_dialog.dart';
+import 'package:note_app/feature/home/pages/home_screen.dart';
 
 class CreateProfile extends StatefulWidget {
   const CreateProfile({super.key});
@@ -79,7 +80,12 @@ class _CreateProfileState extends State<CreateProfile> {
               SizedBox(
                 width: MediaQuery.widthOf(context),
                 height: 50,
-                child: FilledButton(onPressed: () {}, child: Text("Continue") ,
+                child: FilledButton(
+                  onPressed: () => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                  ),
+                  child: Text("Continue"),
                 ),
               ),
             ],
