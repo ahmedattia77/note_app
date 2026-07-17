@@ -11,7 +11,8 @@ Here is a quick video demo showing the application flow, animations, and archite
 
 
 
-https://github.com/user-attachments/assets/66b240e1-ad41-4df6-b0bb-57dadfb8d301
+https://github.com/user-attachments/assets/fbfeb1ff-2c77-41de-8829-ad5351a1b8f5
+
 
 
 
@@ -30,7 +31,7 @@ To maintain clean version control, every feature and screen is developed in its 
 | **Create Profile (Onboarding)** | `feature/create-profile` | `lib/feature/create_profile/presentation/pages/create_profile.dart` | ✅ Completed |
 | **Home Screen (Task Dashboard)** | `feature/home-screen` | `lib/feature/home/pages/home_screen.dart` | ✅ Completed |
 | **Add Task Screen** | `feature/add-task` | `lib/feature/home/pages/add_task.dart` | ✅ Completed |
-| **Add Hive Local Storage** | `feature/add-task` | `lib/feature/home/pages/add_task.dart` | ✅ Completed |
+| **Add Hive Local Storage** | `feature/add-task` ,`feature/home tasks` ,`feature/create profile` | `lib/feature/home/pages/add_task.dart` | ✅ Completed |
 
 ---
 
