@@ -22,7 +22,7 @@ class ProfileImage extends StatelessWidget {
           image != null ?
           Image.file( 
             image!,
-            fit: .cover,
+            fit: BoxFit.cover,
             frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
               if (wasSynchronouslyLoaded) return child;
               return AnimatedOpacity(

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:note_app/feature/splash_screen/views/splash_screen.dart'; // مسار السبيلاش الجديد
+import 'package:note_app/core/services/hive/init_hive.dart';
+import 'package:note_app/feature/splash_screen/views/splash_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await InitHive.initialHive();
   runApp(const MyApp());
 }
 
@@ -17,7 +20,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       title: 'Note App',
-      home: const SplashScreen(), 
+      home: const SplashScreen(),
     );
   }
 }

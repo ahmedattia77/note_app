@@ -9,6 +9,6 @@ class FullNameText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("Full Name" ,textAlign: .center, style: AppTextStyl.blodHintHeadLineTextStyle,);
+    return Text("Full Name" ,textAlign: TextAlign.center, style: AppTextStyl.blodHintHeadLineTextStyle,);
   }
 }

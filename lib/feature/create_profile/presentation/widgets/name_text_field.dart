@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class NameTextField extends StatelessWidget {
   final String hintText;
   final Iterable<String>? autofillHints;
+  final TextEditingController textEditingController; 
 
   const NameTextField({
     super.key,
     required this.hintText,
     this.autofillHints,
+    required this.textEditingController
   });
 
   @override
@@ -21,7 +23,8 @@ class NameTextField extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextField(
-          keyboardType: .name,
+          controller: textEditingController,
+          keyboardType:TextInputType.name ,
           decoration: InputDecoration(
             hintText: hintText,
             border: InputBorder.none,
