@@ -31,7 +31,7 @@ To maintain clean version control, every feature and screen is developed in its 
 | **Create Profile (Onboarding)** | `feature/create-profile` | `lib/feature/create_profile/presentation/pages/create_profile.dart` | ✅ Completed |
 | **Home Screen (Task Dashboard)** | `feature/home-screen` | `lib/feature/home/pages/home_screen.dart` | ✅ Completed |
 | **Add Task Screen** | `feature/add-task` | `lib/feature/home/pages/add_task.dart` | ✅ Completed |
-| **Add Hive Local Storage** | `feature/add-task` ,`feature/home tasks` ,`feature/create profile` | `lib/feature/home/pages/add_task.dart` | ✅ Completed |
+| **Add Hive Local Storage** | `local-data-base` | `lib/feature/home/pages/add_task.dart` | ✅ Completed |
 
 ---
 
