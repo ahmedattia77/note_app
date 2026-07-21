@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:note_app/feature/create_profile/data/model/user_model.dart';
 import 'package:note_app/feature/create_profile/presentation/pages/create_profile.dart';
+import 'package:note_app/feature/home/pages/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -10,6 +13,11 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  Widget _pageRote() {
+    final userBox = Hive.box<UserModel>('userBox');
+    return userBox.isEmpty ? CreateProfile() : HomeScreen();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -17,12 +25,12 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _navigateToNextScreen() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 3));
 
     if (mounted) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const CreateProfile()),
+        MaterialPageRoute(builder: (context) => _pageRote()),
       );
     }
   }

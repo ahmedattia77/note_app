@@ -1,21 +1,22 @@
-
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:note_app/feature/create_profile/data/model/user_model.dart';
 
 class CustomAppBar extends StatelessWidget {
-  const CustomAppBar({super.key});
+  final UserModel user;
+  const CustomAppBar({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const CircleAvatar(
+        CircleAvatar(
           radius: 25,
-          backgroundColor: Color(0xFF3F51B5),
-          child: Icon(Icons.person, color: Colors.white, size: 28),
+          foregroundImage: FileImage(File(user.image)),
         ),
         const SizedBox(width: 15),
-        const Column(
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
@@ -24,7 +25,7 @@ class CustomAppBar extends StatelessWidget {
             ),
             SizedBox(height: 4),
             Text(
-              'Ahmed',
+              user.name,
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -36,7 +37,11 @@ class CustomAppBar extends StatelessWidget {
         const Spacer(),
         IconButton(
           onPressed: () {},
-          icon: const Icon(Icons.notifications_none_outlined, size: 28, color: Colors.black87),
+          icon: const Icon(
+            Icons.notifications_none_outlined,
+            size: 28,
+            color: Colors.black87,
+          ),
         ),
       ],
     );

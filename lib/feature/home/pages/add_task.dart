@@ -1,22 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:note_app/core/styles/app_text_styl.dart';
+import 'package:note_app/feature/home/data/model/task_model.dart';
+import 'package:note_app/feature/home/data/repo/task_repo_imp.dart';
+import 'package:note_app/feature/home/data/use_case/add_task_use_case.dart';
 import 'package:note_app/feature/home/widgest/color_picker.dart';
 import 'package:note_app/feature/home/widgest/custom_text_field.dart';
 import 'package:note_app/feature/home/widgest/status_dropdown.dart';
+import 'package:note_app/feature/home/widgest/task_images_picker.dart';
 
 class AddTask extends StatefulWidget {
-  const AddTask({super.key});
+  final TaskModel? taskToEdit;
+
+  const AddTask({super.key, this.taskToEdit});
 
   @override
   State<AddTask> createState() => _AddTaskState();
 }
 
 class _AddTaskState extends State<AddTask> {
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _titleController;
+  late final TextEditingController _descController;
 
-  String _selectedStatus = 'Pending';
-  Color _selectedColor = const Color(0xFF2196F3); 
+  late String _selectedStatus;
+  late Color _selectedColor;
+  late List<String> _selectedImages;
+
+  late final AddTaskUseCase _addTaskUseCase;
+
+  bool get _isEditing => widget.taskToEdit != null;
+
+  @override
+  void initState() {
+    super.initState();
+    _addTaskUseCase = AddTaskUseCase(TaskRepositoryImpl());
+
+    _titleController = TextEditingController(text: widget.taskToEdit?.title ?? '');
+    _descController = TextEditingController(text: widget.taskToEdit?.subtitle ?? '');
+    _selectedStatus = widget.taskToEdit?.status ?? 'Pending';
+    _selectedColor = widget.taskToEdit != null 
+        ? Color(widget.taskToEdit!.leadingColorValue)
+        : const Color(0xFF2196F3);
+    
+    _selectedImages = List<String>.from(widget.taskToEdit?.images ?? []);
+  }
 
   @override
   void dispose() {
@@ -25,111 +52,149 @@ class _AddTaskState extends State<AddTask> {
     super.dispose();
   }
 
+  Future<void> _saveTask() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    final String id = widget.taskToEdit?.id ?? DateTime.now().millisecondsSinceEpoch.toString();
+    final DateTime taskDate = widget.taskToEdit?.date ?? DateTime.now();
+
+    final task = TaskModel(
+      id: id,
+      title: _titleController.text.trim(),
+      subtitle: _descController.text.trim(),
+      status: _selectedStatus,
+      leadingColorValue: _selectedColor.value,
+      date: taskDate,
+      images: _selectedImages,
+    );
+
+    await _addTaskUseCase(task);
+
+    if (mounted) {
+      Navigator.pop(context, true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: false, title: Text('Add Task')),
+      appBar: AppBar(
+        centerTitle: false, 
+        title: Text(_isEditing ? 'Edit Task' : 'Add Task'),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: .start,
-            children: [
-              const SizedBox(height: 20),
-              Text(
-                'Title',
-                style: AppTextStyl.hintHeadLineTextStyle.copyWith(
-                  fontWeight: .bold,
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                Text(
+                  'Title',
+                  style: AppTextStyl.hintHeadLineTextStyle.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              
-              const SizedBox(height: 10),
-              CustomTextField(
-                controller: _titleController,
-                hintText: 'title...',
-                maxLines: 1,
-              ),
-              const SizedBox(height: 30),
-              Text(
-                'Descreption',
-                style: AppTextStyl.hintHeadLineTextStyle.copyWith(
-                  fontWeight: .bold,
+                const SizedBox(height: 10),
+                CustomTextField(
+                  controller: _titleController,
+                  hintText: 'title...',
+                  maxLines: 1,
+                  validator: (value) => value == null || value.trim().isEmpty 
+                      ? 'Title is required' 
+                      : null,
                 ),
-              ),
-              
-              const SizedBox(height: 10),
-              CustomTextField(
-                controller: _descController,
-                hintText: 'Task Description...',
-                maxLines: 5,
-              ),
-              
-              const SizedBox(height: 30),
-              
-              const Text(
-                'Status',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1E1E1E),
+                const SizedBox(height: 30),
+                Text(
+                  'Description',
+                  style: AppTextStyl.hintHeadLineTextStyle.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              StatusDropdown(
-                selectedValue: _selectedStatus,
-                onChanged: (value) {
-                  setState(() {
-                    _selectedStatus = value!;
-                  });
-                },
-              ),
-              const SizedBox(height: 24),
-              
-              const Text(
-                'Choose Color',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1E1E1E),
+                const SizedBox(height: 10),
+                CustomTextField(
+                  controller: _descController,
+                  hintText: 'Task Description...',
+                  maxLines: 5,
+                  validator: (value) => value == null || value.trim().isEmpty 
+                      ? 'Description is required' 
+                      : null,
                 ),
-              ),
-              const SizedBox(height: 14),
-              ColorPickerList(
-                selectedColor: _selectedColor,
-                onColorSelected: (color) {
-                  setState(() {
-                    _selectedColor = color;
-                  });
-                },
-              ),
-              const SizedBox(height: 40),
-              
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: () {
+                const SizedBox(height: 30),
+                const Text(
+                  'Status',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1E1E1E),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                StatusDropdown(
+                  selectedValue: _selectedStatus,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedStatus = value!;
+                    });
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(
-                      0xFF53639B,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(28),
-                    ),
-                    elevation: 0,
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'Choose Color',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1E1E1E),
                   ),
-                  child: const Text(
-                    'Save Task',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                ),
+                const SizedBox(height: 14),
+                ColorPickerList(
+                  selectedColor: _selectedColor,
+                  onColorSelected: (color) {
+                    setState(() {
+                      _selectedColor = color;
+                    });
+                  },
+                ),
+                const SizedBox(height: 24),
+
+                TaskImagesPicker(
+                  images: _selectedImages,
+                  onImagesChanged: () {
+                    setState(() {});
+                  },
+                ),
+                
+                const SizedBox(height: 40),
+                
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: _saveTask,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF53639B),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(28),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: Text(
+                      _isEditing ? 'Update Task' : 'Save Task',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 24),
+              ],
+            ),
           ),
         ),
       ),

@@ -1,25 +1,38 @@
-import 'package:note_app/feature/home/data/model/home_task_data.dart';
+import 'package:note_app/feature/home/data/model/task_model.dart';
 import 'package:note_app/feature/home/data/repo/task_repo.dart';
 
-class GetTodayTasksUseCase {
+typedef HomeTasksData = ({
+  List<TaskModel> tasks,
+  int totalCount,
+  int pendingCount,
+  int doneCount,
+  int inProgressCount
+});
+
+class GetTasksUseCase {
   final TaskRepository repository;
 
-  const GetTodayTasksUseCase(this.repository);
+  GetTasksUseCase(this.repository);
 
   Future<HomeTasksData> call() async {
-    final homeData = await repository.getTodayTasks();
-    final totalCount = homeData.length;
+    final List<TaskModel> tasks = await repository.getTodayTasks();
 
-    final doneCount = homeData.where((task) => task.status == 'Done').length;
-    final pendingCount = homeData
-        .where((task) => task.status == 'Pending')
-        .length;
+    int totalCount = 0;
+    int pendingCount = 0;
+    int doneCount = 0;
+    int inProgressCount = 0;
 
-    return HomeTasksData(
-      allTasks: homeData,
+    totalCount = tasks.length;
+    pendingCount = tasks.where((t) => t.status == 'Pending').length;
+    doneCount = tasks.where((t) => t.status == 'Done').length;
+    inProgressCount = tasks.where((t) => t.status == 'In Progress').length;
+
+    return (
+      tasks: tasks,
       totalCount: totalCount,
-      doneCount: doneCount,
       pendingCount: pendingCount,
+      doneCount: doneCount,
+      inProgressCount: inProgressCount,
     );
   }
 }
