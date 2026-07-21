@@ -11,7 +11,8 @@ Here is a quick video demo showing the application flow, animations, and archite
 
 
 
-https://github.com/user-attachments/assets/fbfeb1ff-2c77-41de-8829-ad5351a1b8f5
+https://github.com/user-attachments/assets/8a741059-7f20-43d2-b26a-ab3e1fdba55c
+
 
 
 
