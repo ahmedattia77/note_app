@@ -9,7 +9,9 @@ import 'package:note_app/feature/home/widgest/status_dropdown.dart';
 import 'package:note_app/feature/home/widgest/task_images_picker.dart';
 
 class AddTask extends StatefulWidget {
-  const AddTask({super.key});
+  final TaskModel? taskToEdit;
+
+  const AddTask({super.key, this.taskToEdit});
 
   @override
   State<AddTask> createState() => _AddTaskState();
@@ -17,20 +19,30 @@ class AddTask extends StatefulWidget {
 
 class _AddTaskState extends State<AddTask> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descController = TextEditingController();
+  late final TextEditingController _titleController;
+  late final TextEditingController _descController;
 
-  String _selectedStatus = 'Pending';
-  Color _selectedColor = const Color(0xFF2196F3); 
-  
-  final List<String> _selectedImages = [];
-  
+  late String _selectedStatus;
+  late Color _selectedColor;
+  late List<String> _selectedImages;
+
   late final AddTaskUseCase _addTaskUseCase;
+
+  bool get _isEditing => widget.taskToEdit != null;
 
   @override
   void initState() {
     super.initState();
     _addTaskUseCase = AddTaskUseCase(TaskRepositoryImpl());
+
+    _titleController = TextEditingController(text: widget.taskToEdit?.title ?? '');
+    _descController = TextEditingController(text: widget.taskToEdit?.subtitle ?? '');
+    _selectedStatus = widget.taskToEdit?.status ?? 'Pending';
+    _selectedColor = widget.taskToEdit != null 
+        ? Color(widget.taskToEdit!.leadingColorValue)
+        : const Color(0xFF2196F3);
+    
+    _selectedImages = List<String>.from(widget.taskToEdit?.images ?? []);
   }
 
   @override
@@ -43,19 +55,20 @@ class _AddTaskState extends State<AddTask> {
   Future<void> _saveTask() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final String uniqueId = DateTime.now().millisecondsSinceEpoch.toString();
+    final String id = widget.taskToEdit?.id ?? DateTime.now().millisecondsSinceEpoch.toString();
+    final DateTime taskDate = widget.taskToEdit?.date ?? DateTime.now();
 
-    final newTask = TaskModel(
-      id: uniqueId,
+    final task = TaskModel(
+      id: id,
       title: _titleController.text.trim(),
       subtitle: _descController.text.trim(),
       status: _selectedStatus,
       leadingColorValue: _selectedColor.value,
-      date: DateTime.now(), 
+      date: taskDate,
       images: _selectedImages,
     );
 
-    await _addTaskUseCase(newTask);
+    await _addTaskUseCase(task);
 
     if (mounted) {
       Navigator.pop(context, true);
@@ -65,7 +78,10 @@ class _AddTaskState extends State<AddTask> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: false, title: const Text('Add Task')),
+      appBar: AppBar(
+        centerTitle: false, 
+        title: Text(_isEditing ? 'Edit Task' : 'Add Task'),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Form(
@@ -82,7 +98,6 @@ class _AddTaskState extends State<AddTask> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                
                 const SizedBox(height: 10),
                 CustomTextField(
                   controller: _titleController,
@@ -99,7 +114,6 @@ class _AddTaskState extends State<AddTask> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                
                 const SizedBox(height: 10),
                 CustomTextField(
                   controller: _descController,
@@ -109,9 +123,7 @@ class _AddTaskState extends State<AddTask> {
                       ? 'Description is required' 
                       : null,
                 ),
-                
                 const SizedBox(height: 30),
-                
                 const Text(
                   'Status',
                   style: TextStyle(
@@ -130,7 +142,6 @@ class _AddTaskState extends State<AddTask> {
                   },
                 ),
                 const SizedBox(height: 24),
-                
                 const Text(
                   'Choose Color',
                   style: TextStyle(
@@ -153,9 +164,7 @@ class _AddTaskState extends State<AddTask> {
                 TaskImagesPicker(
                   images: _selectedImages,
                   onImagesChanged: () {
-                    setState(() {
-                      
-                    });
+                    setState(() {});
                   },
                 ),
                 
@@ -173,9 +182,9 @@ class _AddTaskState extends State<AddTask> {
                       ),
                       elevation: 0,
                     ),
-                    child: const Text(
-                      'Save Task',
-                      style: TextStyle(
+                    child: Text(
+                      _isEditing ? 'Update Task' : 'Save Task',
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
