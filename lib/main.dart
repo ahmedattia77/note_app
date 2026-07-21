@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:note_app/feature/splash_screen/views/splash_screen.dart'; // مسار السبيلاش الجديد
-
+import 'package:note_app/feature/splash_screen/views/splash_screen.dart'; 
 void main() {
   runApp(const MyApp());
 }
